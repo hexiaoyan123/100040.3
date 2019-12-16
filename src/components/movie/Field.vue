@@ -31,6 +31,7 @@
       <i class="iconfont" v-if="filmDisplayMode == 'text'" @click="filmDisplayMode = 'img'">
         <img src="../../assets/movie/liebiao.png" width="100%" />
       </i>
+      <!-- 标签选择 -->
       <div class="fd-banner-item-list" v-if="filmDisplayMode == 'text'">
         <van-row>
           <template v-for="val in cinemaShowList">
@@ -47,24 +48,12 @@
         </van-row>
         <em class="arrow-top"></em>
       </div>
+      <!-- 电影图选择 -->
       <div style="z-index: 2; banner-div" v-if="filmDisplayMode == 'img'">
         <span
           class="fd-banner-item"
           :class="{'fd-banner-h': film.id == val.id}"
-          v-if="film.id ==  val.id"
           v-for="val in cinemaShowList"
-          :key="val.id"
-          @click="clickFilm(val)"
-        >
-          <i class="img">
-            <img :src="val.poster" style="width: 100%;height: 100%;" />
-          </i>
-          <em class="arrow-top"></em>
-        </span>
-        <span
-          class="fd-banner-item"
-          v-for="val in cinemaShowList"
-          v-if="film.id !== val.id"
           :key="val.id"
           @click="clickFilm(val)"
         >
@@ -140,7 +129,8 @@ export default {
       cinemaShowList: [],
 
       // 影片
-      film: {}
+      film: {},
+      index: 0
     };
   },
   created() {
@@ -206,13 +196,14 @@ export default {
                 if (JSON.stringify(vm.film) != "{}") {
                   vm.cinemaShowList.find(function(e) {
                     if (vm.film.id == e.id) {
+                      vm.cinemaShowList[0] = e;
+                      vm.cinemaShowList = [...new Set(vm.cinemaShowList)];
                       vm.clickFilm(e);
                     }
                   });
                 } else {
                   vm.clickFilm(vm.cinemaShowList[0]);
                 }
-                //let selectDiv = document.querySelector(".fd-banner-h")
               }
             }
           } else {
