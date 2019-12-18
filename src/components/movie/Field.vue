@@ -76,9 +76,16 @@
 
     <!-- 日期导航 -->
     <div v-if="film.showMap">
+      <!-- <div v-for="val in cinemaShowList" :key="val.id">
+        <div v-for="i in val.showMap">
+          <div class="fd-item" v-for="val in i" :key="val.id">
+            <div class="fd-item-left-cont-l">{{val.showStartTime | timeFormat}}</div>
+          </div>
+        </div>
+      </div>-->
       <van-tabs>
-        <van-tab v-for="(value, key) in film.showMap" :title="key" :key="key">
-          <div class="fd-item" v-for="val in value" :key="val.id">
+        <van-tab v-for="(value, key) in film.showMap" :title="key" :key="key" v-model="active">
+          <div class="fd-item" v-for="val in value" :key="val.id" v-show="val.id">
             <div class="fd-item-left">
               <div class="fd-item-left-cont fd-item-left-cont-top">
                 <div class="fd-item-left-cont-l">{{val.showStartTime | timeFormat}}</div>
@@ -130,7 +137,9 @@ export default {
 
       // 影片
       film: {},
-      index: 0
+
+      // 选中
+      active: 0
     };
   },
   created() {
@@ -199,6 +208,8 @@ export default {
                       vm.cinemaShowList[0] = e;
                       vm.cinemaShowList = [...new Set(vm.cinemaShowList)];
                       vm.clickFilm(e);
+                    } else {
+                      vm.clickFilm(vm.cinemaShowList[0]);
                     }
                   });
                 } else {
